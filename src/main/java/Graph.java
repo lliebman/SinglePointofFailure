@@ -1,21 +1,33 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Graph {
-    private LinkedList<GraphNode> nodes;
-    private List<GraphNode> pointsOfFailure = new ArrayList<>();
+    private final List<GraphNode> nodes;
+    private final List<GraphNode> pointsOfFailure = new ArrayList<>();
+    private int numSubnets = 0;
+    private final HashMap<GraphNode, Integer> subnetHashmap = new HashMap<>();
     private int time = 0;
 
-    Graph(){ }
-
-    Graph(LinkedList<GraphNode> nodes) {
+    Graph(List<GraphNode> nodes) {
         this.nodes = nodes;
+        findSPF();
     }
 
-    public List<GraphNode> findSPF()  {
-        // Mark all the vertices as not visited
+    public List<GraphNode> getGraph() {
+        return nodes;
+    }
 
+    public List<GraphNode> getSPF() {
+        return pointsOfFailure;
+    }
+
+    public HashMap<GraphNode, Integer> getSubnets() {
+
+        return subnetHashmap;
+    }
+
+    private void  findSPF()  {
         // Call the recursive helper function to find articulation
         // points in DFS tree rooted with vertex 'i'
         for (GraphNode node : nodes) {
@@ -23,9 +35,6 @@ public class Graph {
                 SPFUtil(node);
             }
         }
-
-        // Now ap[] contains articulation points, print them
-        return pointsOfFailure;
     }
 
     private void SPFUtil(GraphNode node)
@@ -59,14 +68,16 @@ public class Graph {
 
                 // u is an articulation point in following cases
 
-                // (1) u is root of DFS tree and has two or more chilren.
+                // (1) u is root of DFS tree and has two or more children.
                 if (node.getParent() == null && children > 1) {
+                    node.setPof(true);
                     pointsOfFailure.add(node);
                 }
 
                 // (2) If u is not root and low value of one of its child
                 // is more than discovery value of u.
                 if (node.getParent() != null && connection.getLow() >= node.getDiscovered()) {
+                    node.setPof(true);
                     pointsOfFailure.add(node);
                 }
             }

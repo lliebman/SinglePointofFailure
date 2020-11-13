@@ -1,9 +1,11 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class GraphNode {
     private String name;
-    private List<GraphNode> connections;
+    private List<GraphNode> connections = new ArrayList<>();
+    private boolean pof; //point of failure
     private boolean visited;
     private int discovered;
     private int low;
@@ -41,6 +43,12 @@ public class GraphNode {
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
+
+    public boolean isPof() {
+        return pof;
+    }
+
+    public void setPof(boolean pof) {  this.pof = pof; }
 
     public int getDiscovered() {
         return discovered;
