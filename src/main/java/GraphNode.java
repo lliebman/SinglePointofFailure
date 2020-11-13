@@ -1,0 +1,73 @@
+import java.util.List;
+import java.util.Objects;
+
+public class GraphNode {
+    private String name;
+    private List<GraphNode> connections;
+    private boolean visited;
+    private int discovered;
+    private int low;
+    private GraphNode parent;
+
+
+    GraphNode (String name) {
+        this.name = name;
+    }
+
+    GraphNode (String name, List<GraphNode> connections) {
+        this.name = name;
+        this.connections = connections;
+    }
+    public void addConnection(GraphNode node) {
+        this.connections.add(node);
+    }
+
+    public List<GraphNode> getConnections() {
+        return connections;
+    }
+
+    public GraphNode getParent() {
+        return parent;
+    }
+
+    public void setParent(GraphNode parent) {
+        this.parent = parent;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public int getDiscovered() {
+        return discovered;
+    }
+
+    public void setDiscovered(int discovered) {
+        this.discovered = discovered;
+    }
+
+    public int getLow() {
+        return low;
+    }
+
+    public void setLow(int low) {
+        this.low = low;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GraphNode node = (GraphNode) o;
+        return Objects.equals(name, node.name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
