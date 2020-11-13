@@ -23,7 +23,19 @@ public class Graph {
     }
 
     public HashMap<GraphNode, Integer> getSubnets() {
+        for (GraphNode node : pointsOfFailure) {
+            List<GraphNode> connections = node.getConnections();
+            if (node.getParent() == null) {
 
+            }
+            connections.remove(node.getParent());
+            List<GraphNode> children = connections;
+            if (children.size() == 1) {
+                subnetHashmap.put(node, 2);
+            } else if () {
+
+            }
+        }
         return subnetHashmap;
     }
 
