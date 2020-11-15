@@ -1,6 +1,6 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class ReadFile {
     String filename;
@@ -14,25 +14,27 @@ public class ReadFile {
         return file;
     }
 
-    public void parseFile(File file) {
-        convertFilenameToFile();
+    public void parseFile() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String previous = null;
-            int number;
-            while ((number = br.read()) != 0) {
-                String numberString = String.valueOf(number);
-                //add numberString as graphNode;
-                //prev = numberString;
-                if (previous != null) {
-                    //set connection previous to numberString
-                    //set connection numberString to previous
+            Scanner scanner = new Scanner(convertFilenameToFile());
+            int first;
+            int second;
+            int n = scanner.nextInt();
+            for (int i = 0; i < n; i++) {
+                if ((first = scanner.nextInt()) != 0) {
+                    String numberString1 = String.valueOf(first);
+                    GraphNode node1 = new GraphNode(numberString1);
+                    second = scanner.nextInt();
+                    String numberString2 = String.valueOf(second);
+                    GraphNode node2 = new GraphNode(numberString2);
+                    node1.addConnection(node2);
+                    node2.addConnection(node1);
+                } else {
+                    break;
                 }
-
-
             }
-        } catch (Exception ex) {
-
+        } catch (Exception e) {
         }
+
     }
 }
