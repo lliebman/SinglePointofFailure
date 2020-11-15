@@ -72,59 +72,52 @@ public class Graph {
         // points in DFS tree rooted with vertex 'i'
         for (GraphNode node : nodes) {
             if (!node.isVisited()) {
-                SPFUtil(node);
+                tarjanAlgorithm(node);
             }
         }
     }
 
-    private void SPFUtil(GraphNode node)
+    private void tarjanAlgorithm(GraphNode node)
     {
-        // Count of children in DFS Tree
         int children = 0;
-
-        // Mark the current node as visited
         node.setVisited(true);
-
-        // Initialize discovery time and low value
         time++;
         node.setDiscovered(time);
         node.setLow(time);
 
-        // Go through all vertices adjacent to this
         for (GraphNode connection : node.getConnections())
         {
-
-            // If connection (v) is not visited yet, then make it a child of currentNode (u)
+            // If connection is not visited yet, then make it a child of currentNode
             // in DFS tree and recur for it
             if (!connection.isVisited())
             {
                 children++;
                 connection.setParent(node);
-                SPFUtil(connection);
+                tarjanAlgorithm(connection);
+                setNodeSPFMaybe(node, connection, children);
 
                 // Check if the subtree rooted with v has a connection to
                 // one of the ancestors of u
                 node.setLow(Math.min(node.getLow(), connection.getLow()));
-
-                // u is an articulation point in following cases
-
-                // (1) u is root of DFS tree and has two or more children.
-                if (node.getParent() == null && children > 1) {
-                    node.setPof(true);
-                    pointsOfFailure.add(node);
-                }
-                // (2) If u is not root and low value of one of its child
-                // is more than or equal to discovery value of u.
-                if (node.getParent() != null && connection.getLow() >= node.getDiscovered()) {
-                    node.setPof(true);
-                    pointsOfFailure.add(node);
-                }
             }
-
-            // Update low value of u for parent function calls.
             else if (connection != node.getParent()) {
                 node.setLow(Math.min(node.getLow(), connection.getDiscovered()));
             }
+        }
+    }
+
+    private void setNodeSPFMaybe(GraphNode node, GraphNode connection, int children) {
+        // (1) node is root of DFS tree and has two or more children.
+        if (node.getParent() == null && children > 1) {
+            node.setPof(true);
+            pointsOfFailure.add(node);
+        }
+
+        // (2) If node is not root and low value of one of its child
+        // is more than node's discovery value.
+        if (node.getParent() != null && connection.getLow() >= node.getDiscovered()) {
+            node.setPof(true);
+            pointsOfFailure.add(node);
         }
     }
 }
