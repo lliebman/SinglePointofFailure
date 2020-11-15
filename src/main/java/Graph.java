@@ -7,6 +7,7 @@ public class Graph {
     private final List<GraphNode> nodes;
     private final List<GraphNode> pointsOfFailure = new ArrayList<>();
     private final HashMap<GraphNode, Integer> subnetHashmap = new HashMap<>();
+    private final HashMap<String, Boolean> visitedNodesMap = new HashMap<>();
     private int time = 0;
 
     Graph(List<GraphNode> nodes) {
@@ -23,10 +24,10 @@ public class Graph {
     }
 
     public HashMap<GraphNode, Integer> getSubnets() {
+        visitedNodesMap.clear();
         for (GraphNode node : pointsOfFailure) {
             List<GraphNode> deepCopyNodes = deepCopyNodes();
             deepCopyNodes.remove(node);
-           // removeNodeFromList(node, deepCopyNodes);
             int numSubnets = countSubnets(deepCopyNodes, node);
             subnetHashmap.put(node, numSubnets);
         }
@@ -37,10 +38,9 @@ public class Graph {
         List<GraphNode> deepCopyNodes = new ArrayList<>();
         for (GraphNode node : nodes) {
             List<GraphNode> connections = new ArrayList<>(node.getConnections());
-            for (GraphNode connection : connections) {
-                connection.setVisited(false);
-            }
-            deepCopyNodes.add(new GraphNode(node.getName(), connections));
+            GraphNode newNode = new GraphNode(node.getName(), connections);
+            deepCopyNodes.add(newNode);
+            visitedNodesMap.put(newNode.getName(), false);
         }
         return deepCopyNodes;
     }
@@ -49,7 +49,7 @@ public class Graph {
     {
         int numSubnets = 0;
         for (GraphNode node : nodeList) {
-            if (!node.isVisited()) {
+            if (!visitedNodesMap.get(node.getName())) {
                 depthFirstSearch(node, spf);
                 numSubnets++;
             }
@@ -60,10 +60,9 @@ public class Graph {
    private void depthFirstSearch(GraphNode node, GraphNode spf)
     {
         node.setVisited(true);
+        visitedNodesMap.replace(node.getName(), false, true);
         for (GraphNode connection : node.getConnections()) {
-            boolean visited = !connection.isVisited();
-            boolean isSPF = !connection.equals(spf);
-            if (!connection.isVisited() && !connection.equals(spf))
+            if (!visitedNodesMap.get(connection.getName()) && !connection.equals(spf))
                 depthFirstSearch(connection, spf);
         }
     }
