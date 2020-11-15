@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class Graph {
     private final List<GraphNode> nodes;
     private final List<GraphNode> pointsOfFailure = new ArrayList<>();
-    private int numSubnets = 0;
     private final HashMap<GraphNode, Integer> subnetHashmap = new HashMap<>();
     private int time = 0;
 
@@ -24,19 +24,48 @@ public class Graph {
 
     public HashMap<GraphNode, Integer> getSubnets() {
         for (GraphNode node : pointsOfFailure) {
-            List<GraphNode> connections = node.getConnections();
-            if (node.getParent() == null) {
-
-            }
-            connections.remove(node.getParent());
-            List<GraphNode> children = connections;
-            if (children.size() == 1) {
-                subnetHashmap.put(node, 2);
-            } else if () {
-
-            }
+            List<GraphNode> deepCopyNodes = deepCopyNodes();
+            deepCopyNodes.remove(node);
+           // removeNodeFromList(node, deepCopyNodes);
+            int numSubnets = countSubnets(deepCopyNodes, node);
+            subnetHashmap.put(node, numSubnets);
         }
         return subnetHashmap;
+    }
+
+    private List<GraphNode> deepCopyNodes() {
+        List<GraphNode> deepCopyNodes = new ArrayList<>();
+        for (GraphNode node : nodes) {
+            List<GraphNode> connections = new ArrayList<>(node.getConnections());
+            for (GraphNode connection : connections) {
+                connection.setVisited(false);
+            }
+            deepCopyNodes.add(new GraphNode(node.getName(), connections));
+        }
+        return deepCopyNodes;
+    }
+
+    private int countSubnets(List<GraphNode> nodeList, GraphNode spf)
+    {
+        int numSubnets = 0;
+        for (GraphNode node : nodeList) {
+            if (!node.isVisited()) {
+                depthFirstSearch(node, spf);
+                numSubnets++;
+            }
+        }
+        return numSubnets;
+    }
+
+   private void depthFirstSearch(GraphNode node, GraphNode spf)
+    {
+        node.setVisited(true);
+        for (GraphNode connection : node.getConnections()) {
+            boolean visited = !connection.isVisited();
+            boolean isSPF = !connection.equals(spf);
+            if (!connection.isVisited() && !connection.equals(spf))
+                depthFirstSearch(connection, spf);
+        }
     }
 
     private void  findSPF()  {
@@ -85,9 +114,8 @@ public class Graph {
                     node.setPof(true);
                     pointsOfFailure.add(node);
                 }
-
                 // (2) If u is not root and low value of one of its child
-                // is more than discovery value of u.
+                // is more than or equal to discovery value of u.
                 if (node.getParent() != null && connection.getLow() >= node.getDiscovered()) {
                     node.setPof(true);
                     pointsOfFailure.add(node);
@@ -100,6 +128,4 @@ public class Graph {
             }
         }
     }
-
-
 }

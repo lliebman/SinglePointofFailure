@@ -87,12 +87,15 @@ public class GraphTest {
         nodeList.add(node5);
 
         Graph graph = new Graph(nodeList);
+        HashMap<GraphNode, Integer> expectedSubnets = new HashMap<>();
+        expectedSubnets.put(node1, 2);
 
         //when
-        HashMap<GraphNode, Integer> numSubnets = graph.getSubnets();
+        HashMap<GraphNode, Integer> subnets = graph.getSubnets();
 
         //then
-
+        assertEquals(1, subnets.size());
+        assertEquals(expectedSubnets, subnets);
     }
 
     @Test

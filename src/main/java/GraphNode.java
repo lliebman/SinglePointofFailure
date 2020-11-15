@@ -20,8 +20,17 @@ public class GraphNode {
         this.name = name;
         this.connections = connections;
     }
+
+    public String getName() {
+        return name;
+    }
+
     public void addConnection(GraphNode node) {
         this.connections.add(node);
+    }
+
+    public void removeConnection(GraphNode node) {
+        this.connections.remove(node);
     }
 
     public List<GraphNode> getConnections() {
@@ -78,4 +87,6 @@ public class GraphNode {
     public String toString() {
         return name;
     }
+
+
 }
