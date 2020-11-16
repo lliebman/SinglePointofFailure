@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 
-public class NodeView extends JComponent {
+public class NetworkView extends JComponent {
 
     private final Graph graph;
     private final int nodeSize = 20;
     private int networkRadius = 0;
     private int viewSize = networkRadius + 300;
+    private int networkCenterX = viewSize / 2;
+    private int networkCenterY = viewSize / 2;
+    private int x = networkCenterX;
+    private int y = networkCenterY;
     List<GraphNode> listNodes = new ArrayList<>();
-    int xyValues[] = new int[2];
+    int[] xyValues = new int[2];
     HashMap<GraphNode, int[]> nodeValues = new HashMap<>();
 
-    public NodeView(Graph graph) {
+    public NetworkView(Graph graph) {
         this.graph = graph;
     }
 
@@ -34,10 +38,6 @@ public class NodeView extends JComponent {
         int nrNodes = graph.getGraph().size();
         double angleFactor = 2 * Math.PI / nrNodes;
         double angle;
-        int networkCenterX = viewSize / 2;
-        int networkCenterY = viewSize / 2;
-        int x = networkCenterX;
-        int y = networkCenterY;
         xyValues[0] = x;
         xyValues[1] = y;
         for (int i = 0; i < nrNodes; i++) {
