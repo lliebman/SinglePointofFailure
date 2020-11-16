@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class NetworkFrame extends JFrame {
 
-    public NetworkFrame(NodeView view) throws HeadlessException {
+    public NetworkFrame(NetworkView view) throws HeadlessException {
         super();
 
         setSize(view.getViewSize() + 50, view.getViewSize() + 50);
