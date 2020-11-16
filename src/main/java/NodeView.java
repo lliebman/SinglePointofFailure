@@ -9,13 +9,17 @@ public class NodeView extends JComponent {
     private final Graph graph;
     private final int nodeSize = 20;
     private int networkRadius = 0;
-    private int viewSize = networkRadius + 50;
+    private int viewSize = networkRadius + 300;
     List<GraphNode> listNodes = new ArrayList<>();
     int xyValues[] = new int[2];
     HashMap<GraphNode, int[]> nodeValues = new HashMap<>();
 
     public NodeView(Graph graph) {
         this.graph = graph;
+    }
+
+    public int getViewSize() {
+        return viewSize;
     }
 
     @Override
@@ -53,14 +57,26 @@ public class NodeView extends JComponent {
 
     void paintConnections(Graphics g) {
         listNodes = graph.getGraph();
+        List<GraphNode> drawnNodes = new ArrayList<>();
         g.setColor(Color.BLUE);
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                for (GraphNode possibleDuplicate : listNodes) {
-                    if (connection.equals(possibleDuplicate)) ;
-                    else g.drawLine(nodeValues.get(node)[0], nodeValues.get(node)[1],
+                try {
+                    g.drawLine(nodeValues.get(node)[0], nodeValues.get(node)[1],
                             nodeValues.get(connection)[0], nodeValues.get(connection)[1]);
+                    drawnNodes.add(node);
                 }
+                catch(Exception ignored) {
+                }
+                /*
+                for (GraphNode possibleDuplicate : drawnNodes) {
+                    if (connection.equals(possibleDuplicate)) ;
+                    else {
+                        g.drawLine(nodeValues.get(node)[0], nodeValues.get(node)[1],
+                                nodeValues.get(connection)[0], nodeValues.get(connection)[1]);
+                        drawnNodes.add(node);
+                    }
+                }*/
             }
         }
     }
