@@ -8,7 +8,8 @@ public class NodeView extends JComponent {
 
     private final Graph graph;
     private final int nodeSize = 20;
-    private int viewSize = 100;
+    private int networkRadius = 0;
+    private int viewSize = networkRadius + 50;
     List<GraphNode> listNodes = new ArrayList<>();
     int xyValues[] = new int[2];
     HashMap<GraphNode, int[]> nodeValues = new HashMap<>();
@@ -28,8 +29,7 @@ public class NodeView extends JComponent {
         listNodes = graph.getGraph();
         int nrNodes = graph.getGraph().size();
         double angleFactor = 2 * Math.PI / nrNodes;
-        double angle = 0;
-        int networkRadius = 0;
+        double angle;
         int networkCenterX = viewSize / 2;
         int networkCenterY = viewSize / 2;
         int x = networkCenterX;
@@ -41,6 +41,7 @@ public class NodeView extends JComponent {
                 g.setColor(Color.RED);
             } else g.setColor(Color.GREEN);
             angle = i * angleFactor;
+            networkRadius += 10;
             x = (int) (networkCenterX + networkRadius * Math.cos(angle));
             y = (int) (networkCenterY + networkRadius * Math.sin(angle));
             xyValues[0] = x;
@@ -56,7 +57,7 @@ public class NodeView extends JComponent {
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
                 for (GraphNode possibleDuplicate : listNodes) {
-                    if (connection.equals(possibleDuplicate)) continue;
+                    if (connection.equals(possibleDuplicate)) ;
                     else g.drawLine(nodeValues.get(node)[0], nodeValues.get(node)[1],
                             nodeValues.get(connection)[0], nodeValues.get(connection)[1]);
                 }
