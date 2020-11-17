@@ -45,9 +45,6 @@ public class Main {
                     String[] splitBySpace = string.split("\\s+");
                     GraphNode node1 = new GraphNode(splitBySpace[0]);
                     GraphNode node2 = new GraphNode(splitBySpace[1]);
-                    if (node1.getName().equals("1") || node2.getName().equals("1")) {
-                        System.out.println("hello");
-                    }
                     if (graphNodeList.contains(node1)) {
                         node1 = graphNodeList.get(graphNodeList.indexOf(node1));
                     }
