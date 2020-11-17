@@ -64,7 +64,6 @@ public class Main {
                 }
             }
             myWriter.close();
-            System.out.println("here 6");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
