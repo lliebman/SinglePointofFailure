@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -14,52 +14,61 @@ public class Main {
             File output = new File("SPFoutput.txt");
             FileWriter myWriter = new FileWriter(output, false);
             int counter = 1;
-            myWriter.write("Network #" + counter + "\n");
             while (input.hasNextLine()) {
                 String string = input.nextLine();
                 if (string.length() == 1) { //line contains a single 0
                     //display SPF
-                    graph = new Graph(graphNodeList);
-                    System.out.println(graphNodeList.toArray().length);
-                    System.out.println("-----------"+graph.getGraph().toArray().length);
-                    System.out.println("look up^^^^^^^^^^");
-                    List<GraphNode> pointsOfFailure = graph.getSPF();
-                    for (GraphNode gn : pointsOfFailure) {
-                        myWriter.write("\tSPF node " + gn.toString() + "\n");
+                    if (!graphNodeList.isEmpty()) {
+                        graph = new Graph(graphNodeList);
+                        HashMap<GraphNode, Integer> spfAndSubnets = graph.getSubnets();
+                        myWriter.write("Network #" + counter + "\n");
+                        spfAndSubnets.forEach((key, value) -> {
+                            try {
+                                myWriter.write("\tSPF node " + key.toString()
+                                        + " leaves " + value.toString() + " subnets" + "\n");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
+
+                        if (spfAndSubnets.isEmpty()) {
+                            myWriter.write("\tNo SPF nodes\n");
+                        }
+                        graphNodeList.clear();
+                        myWriter.write("\n");
                     }
-                    if(pointsOfFailure.isEmpty()) {
-                        myWriter.write("\tNo SPF nodes\n");
-                    }
-                    graphNodeList.clear();
-                    myWriter.write("\n");
                 } else if (string.isBlank()) { //line is blank
                     counter++;
-                    myWriter.write("Network #" + counter + "\n");
-                } else if (string.length() > 1){ //line contains a pair of numbers
+                    //myWriter.write("Network #" + counter + "\n");
+                } else if (string.length() > 1) { //line contains a pair of numbers
                     String[] splitBySpace = string.split("\\s+");
                     GraphNode node1 = new GraphNode(splitBySpace[0]);
                     GraphNode node2 = new GraphNode(splitBySpace[1]);
-                    for (GraphNode gn : graphNodeList) {
-                        if (gn.equals(node1)) {
-                            node1 = gn;
-                        } else if (gn.equals(node2)) {
-                            node2 = gn;
-                        }
-                        node1.addConnection(node2);
-                        node2.addConnection(node1);
-                        break;
+                    if (node1.getName().equals("1") || node2.getName().equals("1")) {
+                        System.out.println("hello");
                     }
+                    if (graphNodeList.contains(node1)) {
+                        node1 = graphNodeList.get(graphNodeList.indexOf(node1));
+                    }
+                    if (graphNodeList.contains(node2)) {
+                        node2 = graphNodeList.get(graphNodeList.indexOf(node2));
+                    }
+                    if (!graphNodeList.contains(node1)) {
+                        graphNodeList.add(node1);
+                    }
+                    if (!graphNodeList.contains(node2)) {
+                        graphNodeList.add(node2);
+                    }
+
                     node1.addConnection(node2);
                     node2.addConnection(node1);
-                    System.out.println(node1);
-                    System.out.println(node2);
-                    graphNodeList.add(node1);
-                    graphNodeList.add(node2);
+
                 }
             }
             myWriter.close();
             System.out.println("here 6");
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
