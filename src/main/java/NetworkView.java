@@ -12,10 +12,11 @@ public class NetworkView extends JComponent {
     private int viewSize = networkRadius + 300;
     private int networkCenterX = viewSize / 2;
     private int networkCenterY = viewSize / 2;
-    private int x = networkCenterX;
-    private int y = networkCenterY;
-    List<GraphNode> listNodes = new ArrayList<>();
+    int nrNodes;
     int[] xyValues = new int[2];
+
+    List<GraphNode> listNodes = new ArrayList<>();
+
     HashMap<GraphNode, int[]> nodeValues = new HashMap<>();
 
     public NetworkView(Graph graph) {
@@ -35,38 +36,43 @@ public class NetworkView extends JComponent {
 
     void paintNodes(Graphics g) {
         listNodes = graph.getGraph();
-        int nrNodes = graph.getGraph().size();
+        nrNodes = graph.getGraph().size();
+
         double angleFactor = 2 * Math.PI / nrNodes;
         double angle;
-        xyValues[0] = x;
-        xyValues[1] = y;
         for (int i = 0; i < nrNodes; i++) {
             if (listNodes.get(i).isPof()) {
                 g.setColor(Color.RED);
             } else g.setColor(Color.GREEN);
             angle = i * angleFactor;
-            networkRadius += 10;
-            x = (int) (networkCenterX + networkRadius * Math.cos(angle));
-            y = (int) (networkCenterY + networkRadius * Math.sin(angle));
+            networkRadius += 5;
+            int x = (int) (networkCenterX + networkRadius * Math.cos(angle));
+            int y = (int) (networkCenterY + networkRadius * Math.sin(angle));
             xyValues[0] = x;
             xyValues[1] = y;
             nodeValues.put(listNodes.get(i), xyValues);
-            g.drawOval(x, y, nodeSize, nodeSize);
+            g.fillOval(x, y, nodeSize, nodeSize);
+            //g.drawChars();
         }
     }
 
     void paintConnections(Graphics g) {
         listNodes = graph.getGraph();
+        nrNodes = graph.getGraph().size();
         List<GraphNode> drawnNodes = new ArrayList<>();
         g.setColor(Color.BLUE);
-        for (GraphNode node : listNodes) {
+        for (int i = 0; i < nrNodes; i++) {
+            GraphNode node = listNodes.get(i);
             for (GraphNode connection : node.getConnections()) {
                 try {
-                    g.drawLine(nodeValues.get(node)[0], nodeValues.get(node)[1],
+                    g.drawLine(nodeValues.get(node)[0], nodeValues.get(node)[0],
                             nodeValues.get(connection)[0], nodeValues.get(connection)[1]);
                     drawnNodes.add(node);
-                }
-                catch(Exception ignored) {
+                    System.out.println(nodeValues.get(node)[0]);
+                    System.out.println(nodeValues.get(node)[1]);
+                    System.out.println(nodeValues.get(connection)[0]);
+                    System.out.println(nodeValues.get(connection)[1]);
+                } catch (Exception ignored) {
                 }
                 /*
                 for (GraphNode possibleDuplicate : drawnNodes) {
@@ -77,6 +83,7 @@ public class NetworkView extends JComponent {
                         drawnNodes.add(node);
                     }
                 }*/
+
             }
         }
     }
