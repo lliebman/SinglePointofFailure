@@ -51,6 +51,7 @@ public class ReadAndWrite {
     private void displaySPFandSubnets(ArrayList<GraphNode> graphNodeList, FileWriter myWriter) throws IOException {
         if (!graphNodeList.isEmpty()) {
             graph = new Graph(graphNodeList);
+            displayView(graph);
             HashMap<GraphNode, Integer> spfAndSubnets = graph.getSubnets();
             myWriter.write("Network #" + getCounter() + "\n");
             spfAndSubnets.forEach((key, value) -> {
@@ -88,6 +89,12 @@ public class ReadAndWrite {
 
         node1.addConnection(node2);
         node2.addConnection(node1);
+    }
+
+    private void displayView(Graph graph) {
+        NetworkView view = new NetworkView(graph);
+        NetworkFrame frame = new NetworkFrame(view);
+        frame.setVisible(true);
     }
 }
 
