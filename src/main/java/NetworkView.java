@@ -47,7 +47,8 @@ public class NetworkView extends JComponent {
             node.setY(y);
             int nodeSize = 20;
             g.fillOval(x, y, nodeSize, nodeSize);
-            //g.drawChars();
+            g.setColor(Color.BLACK);
+            g.drawString(node.getName(), x, y);
         }
     }
 
