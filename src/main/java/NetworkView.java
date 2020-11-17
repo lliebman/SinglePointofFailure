@@ -7,11 +7,7 @@ import java.util.HashMap;
 public class NetworkView extends JComponent {
 
     private final Graph graph;
-    private final int nodeSize = 20;
-    private int networkRadius = 0;
-    private int viewSize = networkRadius + 300;
-    private int networkCenterX = viewSize / 2;
-    private int networkCenterY = viewSize / 2;
+    private int viewSize;
     int nrNodes;
     int[] xyValues = new int[2];
 
@@ -37,7 +33,10 @@ public class NetworkView extends JComponent {
     void paintNodes(Graphics g) {
         listNodes = graph.getGraph();
         nrNodes = graph.getGraph().size();
-
+        int networkRadius = nrNodes * 10;
+        viewSize = networkRadius*2 + 300;
+        int networkCenterX = viewSize / 2;
+        int networkCenterY = viewSize / 2;
         double angleFactor = 2 * Math.PI / nrNodes;
         double angle;
         for (int i = 0; i < nrNodes; i++) {
@@ -45,12 +44,12 @@ public class NetworkView extends JComponent {
                 g.setColor(Color.RED);
             } else g.setColor(Color.GREEN);
             angle = i * angleFactor;
-            networkRadius += 5;
             int x = (int) (networkCenterX + networkRadius * Math.cos(angle));
             int y = (int) (networkCenterY + networkRadius * Math.sin(angle));
             xyValues[0] = x;
             xyValues[1] = y;
             nodeValues.put(listNodes.get(i), xyValues);
+            int nodeSize = 20;
             g.fillOval(x, y, nodeSize, nodeSize);
             //g.drawChars();
         }
