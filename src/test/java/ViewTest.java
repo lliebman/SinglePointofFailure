@@ -136,6 +136,8 @@ public class ViewTest {
         listNodes.add(node11);
         listNodes.add(node12);
 
+        when(graph.getGraph()).thenReturn(listNodes);
+
         view.paintNodes(g);
 
         //when
@@ -144,11 +146,7 @@ public class ViewTest {
         //then
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                if (drawnNodes.contains(node)) ;
-                else {
-                    verify(g).drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
-                    verify(drawnNodes.add(node));
-                }
+                verify(g).drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
             }
         }
     }
