@@ -7,9 +7,7 @@ import java.util.HashMap;
 public class NetworkView extends JComponent {
 
     private final Graph graph;
-    private int viewSize = 500;
-    private int networkCenterX = viewSize / 2;
-    private int networkCenterY = viewSize / 2;
+    private final int viewSize = 500;
     int nrNodes;
 
     List<GraphNode> listNodes = new ArrayList<>();
@@ -35,13 +33,15 @@ public class NetworkView extends JComponent {
         int networkRadius = nrNodes * 10;
         double angleFactor = 2 * Math.PI / nrNodes;
         double angle;
-        for (int i = 0; i < nrNodes; i++) {
-            GraphNode node = listNodes.get(i);
-            if (listNodes.get(i).isPof()) {
+        int i = 0;
+        for (GraphNode node : listNodes) {
+            if (node.isPof()) {
                 g.setColor(Color.RED);
             } else g.setColor(Color.GREEN);
             angle = i * angleFactor;
+            int networkCenterX = viewSize / 2;
             int x = (int) (networkCenterX + networkRadius * Math.cos(angle));
+            int networkCenterY = viewSize / 2;
             int y = (int) (networkCenterY + networkRadius * Math.sin(angle));
             node.setX(x);
             node.setY(y);
@@ -49,6 +49,7 @@ public class NetworkView extends JComponent {
             g.fillOval(x-9, y-16, nodeSize, nodeSize);
             g.setColor(Color.BLACK);
             g.drawString(node.getName(), x, y);
+            i++;
         }
     }
 
@@ -58,8 +59,7 @@ public class NetworkView extends JComponent {
         g.setColor(Color.BLUE);
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                if (drawnConnections.get(node) == connection) ;
-                else {
+                if (drawnConnections.get(node) != connection) {
                     g.drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
                     drawnConnections.put(node, connection);
                 }

@@ -87,17 +87,12 @@ public class Graph {
 
         for (GraphNode connection : node.getConnections())
         {
-            // If connection is not visited yet, then make it a child of currentNode
-            // in DFS tree and recur for it
             if (!connection.isVisited())
             {
                 children++;
                 connection.setParent(node);
                 tarjanAlgorithm(connection);
                 setNodeSPFMaybe(node, connection, children);
-
-                // Check if the subtree rooted with v has a connection to
-                // one of the ancestors of u
                 node.setLow(Math.min(node.getLow(), connection.getLow()));
             }
             else if (connection != node.getParent()) {
