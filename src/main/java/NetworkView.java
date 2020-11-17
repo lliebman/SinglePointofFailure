@@ -45,8 +45,8 @@ public class NetworkView extends JComponent {
             int y = (int) (networkCenterY + networkRadius * Math.sin(angle));
             node.setX(x);
             node.setY(y);
-            int nodeSize = 20;
-            g.fillOval(x, y, nodeSize, nodeSize);
+            int nodeSize = 25;
+            g.fillOval(x-9, y-16, nodeSize, nodeSize);
             g.setColor(Color.BLACK);
             g.drawString(node.getName(), x, y);
         }
@@ -54,16 +54,14 @@ public class NetworkView extends JComponent {
 
     void paintConnections(Graphics g) {
         listNodes = graph.getGraph();
-        nrNodes = graph.getGraph().size();
-        List<GraphNode> drawnNodes = new ArrayList<>();
+        HashMap<GraphNode, GraphNode> drawnConnections = new HashMap<>();
         g.setColor(Color.BLUE);
-        for (int i = 0; i < nrNodes; i++) {
-            GraphNode node = listNodes.get(i);
+        for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                if (drawnNodes.contains(node)) ;
+                if (drawnConnections.get(node) == connection) ;
                 else {
                     g.drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
-                    drawnNodes.add(node);
+                    drawnConnections.put(node, connection);
                 }
             }
         }
