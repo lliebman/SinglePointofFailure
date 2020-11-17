@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class Graph {
     private final List<GraphNode> nodes;
     private final List<GraphNode> pointsOfFailure = new ArrayList<>();
-    private int numSubnets = 0;
     private final HashMap<GraphNode, Integer> subnetHashmap = new HashMap<>();
+    private final HashMap<String, Boolean> visitedNodesMap = new HashMap<>();
     private int time = 0;
 
     Graph(List<GraphNode> nodes) {
@@ -23,8 +24,47 @@ public class Graph {
     }
 
     public HashMap<GraphNode, Integer> getSubnets() {
-
+        visitedNodesMap.clear();
+        for (GraphNode node : pointsOfFailure) {
+            List<GraphNode> deepCopyNodes = deepCopyNodes();
+            deepCopyNodes.remove(node);
+            int numSubnets = countSubnets(deepCopyNodes, node);
+            subnetHashmap.put(node, numSubnets);
+        }
         return subnetHashmap;
+    }
+
+    private List<GraphNode> deepCopyNodes() {
+        List<GraphNode> deepCopyNodes = new ArrayList<>();
+        for (GraphNode node : nodes) {
+            List<GraphNode> connections = new ArrayList<>(node.getConnections());
+            GraphNode newNode = new GraphNode(node.getName(), connections);
+            deepCopyNodes.add(newNode);
+            visitedNodesMap.put(newNode.getName(), false);
+        }
+        return deepCopyNodes;
+    }
+
+    private int countSubnets(List<GraphNode> nodeList, GraphNode spf)
+    {
+        int numSubnets = 0;
+        for (GraphNode node : nodeList) {
+            if (!visitedNodesMap.get(node.getName())) {
+                depthFirstSearch(node, spf);
+                numSubnets++;
+            }
+        }
+        return numSubnets;
+    }
+
+   private void depthFirstSearch(GraphNode node, GraphNode spf)
+    {
+        node.setVisited(true);
+        visitedNodesMap.replace(node.getName(), false, true);
+        for (GraphNode connection : node.getConnections()) {
+            if (!visitedNodesMap.get(connection.getName()) && !connection.equals(spf))
+                depthFirstSearch(connection, spf);
+        }
     }
 
     private void  findSPF()  {
@@ -80,6 +120,4 @@ public class Graph {
             pointsOfFailure.add(node);
         }
     }
-
-
 }

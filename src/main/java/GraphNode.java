@@ -6,7 +6,12 @@ public class GraphNode {
     private String name;
     private List<GraphNode> connections = new ArrayList<>();
     private boolean pof; //point of failure
+
+    /**
+     * used ONLY for finding spf, not for finding num subnets
+     */
     private boolean visited;
+
     private int discovered;
     private int low;
     private GraphNode parent;
@@ -20,8 +25,17 @@ public class GraphNode {
         this.name = name;
         this.connections = connections;
     }
+
+    public String getName() {
+        return name;
+    }
+
     public void addConnection(GraphNode node) {
         this.connections.add(node);
+    }
+
+    public void removeConnection(GraphNode node) {
+        this.connections.remove(node);
     }
 
     public List<GraphNode> getConnections() {
