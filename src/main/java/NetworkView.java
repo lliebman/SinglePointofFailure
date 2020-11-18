@@ -63,7 +63,7 @@ public class NetworkView extends JComponent {
         g.setColor(Color.BLUE);
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                if (drawnConnections.get(node) != connection) {
+                if (!drawnConnections.get(node).equals(connection)) {
                     g.drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
                     drawnConnections.put(node, connection);
                 }
