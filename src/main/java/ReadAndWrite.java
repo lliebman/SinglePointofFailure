@@ -92,6 +92,11 @@ public class ReadAndWrite {
     }
 
     private void displayView(Graph graph) {
+        try {
+            Thread.sleep(10);  //added sleep because otherwise it runs too fast, and views don't show
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         NetworkView view = new NetworkView(graph);
         NetworkFrame frame = new NetworkFrame(view);
         frame.setVisible(true);
