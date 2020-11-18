@@ -90,7 +90,7 @@ public class ViewTest {
         Graph graph = mock(Graph.class);
         NetworkView view = new NetworkView(graph);
 
-        List<GraphNode> drawnNodes = new ArrayList<>();
+        HashMap<GraphNode, GraphNode> drawnConnections = new HashMap<>();
 
         Graphics g = mock(Graphics.class);
 
@@ -146,7 +146,12 @@ public class ViewTest {
         //then
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                verify(g).drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
+                if (drawnConnections.containsKey(node)) {
+                    if (drawnConnections.get(node).equals(connection)) ;
+                } else {
+                    verify(g).drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
+                    drawnConnections.put(node, connection);
+                }
             }
         }
     }
