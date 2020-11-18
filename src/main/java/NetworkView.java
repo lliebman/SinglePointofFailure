@@ -73,4 +73,3 @@ public class NetworkView extends JComponent {
         }
     }
 }
-
