@@ -34,6 +34,10 @@ public class NetworkView extends JComponent {
         double angleFactor = 2 * Math.PI / nrNodes;
         double angle;
         int i = 0;
+        if (listNodes.isEmpty()) {
+            g.setColor(Color.BLACK);
+            g.drawString("No nodes found", viewSize / 2, viewSize / 2);
+        }
         for (GraphNode node : listNodes) {
             if (node.isPof()) {
                 g.setColor(Color.RED);
