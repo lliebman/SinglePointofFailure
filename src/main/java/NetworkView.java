@@ -65,6 +65,9 @@ public class NetworkView extends JComponent {
             for (GraphNode connection : node.getConnections()) {
                 if (drawnConnections.containsKey(node)) {
                     if (drawnConnections.get(node).equals(connection)) ;
+                }
+                if (drawnConnections.containsKey(connection)) {
+                    if (drawnConnections.get(connection).equals(node)) ;
                 } else {
                     g.drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
                     drawnConnections.put(node, connection);
