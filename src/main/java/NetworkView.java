@@ -50,7 +50,7 @@ public class NetworkView extends JComponent {
             node.setX(x);
             node.setY(y);
             int nodeSize = 25;
-            g.fillOval(x-9, y-16, nodeSize, nodeSize);
+            g.fillOval(x - 9, y - 16, nodeSize, nodeSize);
             g.setColor(Color.BLACK);
             g.drawString(node.getName(), x, y);
             i++;
@@ -63,7 +63,12 @@ public class NetworkView extends JComponent {
         g.setColor(Color.BLUE);
         for (GraphNode node : listNodes) {
             for (GraphNode connection : node.getConnections()) {
-                if (drawnConnections.get(node) != connection) {
+                if (drawnConnections.containsKey(node)) {
+                    if (drawnConnections.get(node).equals(connection)) ;
+                }
+                if (drawnConnections.containsKey(connection)) {
+                    if (drawnConnections.get(connection).equals(node)) ;
+                } else {
                     g.drawLine(node.getX(), node.getY(), connection.getX(), connection.getY());
                     drawnConnections.put(node, connection);
                 }
